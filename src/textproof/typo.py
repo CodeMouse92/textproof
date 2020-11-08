@@ -46,4 +46,4 @@ class Typo:
             length_change = len(suggestion) - self.length
             return (suggestion, self.offset, self.length, length_change)
         else:
-            return (None,) * 4
+            return (None, 0, 0, 0)

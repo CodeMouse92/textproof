@@ -1,25 +1,23 @@
+import pathlib
+import click
+from textproof.fileio import FileIO
 from textproof.checked_text import CheckedText
 
+@click.command()
+@click.argument('path')
+@click.option('--output', default=None, help="the path to write to")
+def main(path, output):
+    file = FileIO(path, output)
+    try:
+        file.load()
+    except FileNotFoundError:
+        print(f"Could not open file {path}")
+        return
 
-def main():
-    check = None
-    while True:
-        text = input("Enter a sentence to check, or 'q' to exit...\n> ")
-        if text == '':
-            continue
-        elif check and text == 'r':
-            text = str(check)
-        elif text == 'q':
-            break
-
-        check = CheckedText(text)
-        check.fix_typos()
-
-        print("\nREVISED:", check)
-
-        print("\nEnter 'r' to recheck revised text.")
-
-    print("Goodbye.")
+    check = CheckedText(file.data)
+    check.fix_typos()
+    file.data = str(check)
+    file.save()
 
 
 if __name__ == "__main__":

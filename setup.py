@@ -25,7 +25,7 @@ setup(
     packages=find_packages(where='src'),
     include_package_data=True,
     python_requires='>=3.6, <4',
-    install_requires=['requests'],
+    install_requires=['requests', 'click'],
     extras_require={
         'test': ['pytest'],
     },
