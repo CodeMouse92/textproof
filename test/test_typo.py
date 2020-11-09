@@ -3,38 +3,25 @@ from textproof.typo import Typo
 from . import dummy
 
 
-# TODO: Resume from here. See and achieve https://docs.pytest.org/en/stable/example/parametrize.html?highlight=indirect#indirect-parametrization-with-multiple-fixtures
-
-@pytest.fixture
-def example_typo():
-    return Typo(dummy.api_response[i])
-
-
-@pytest.fixture
-def example_prompt():
-    return dummy.prompts[i]
+@pytest.mark.parametrize("example_typo", range(3), indirect=True)
+@pytest.mark.parametrize("example_response", range(3), indirect=True)
+def test_create_typo(example_typo, example_response):
+    assert example_typo.offset == example_response['offset']
+    assert example_typo.length == example_response['length']
+    assert example_typo.message == example_response['message']
+    assert example_typo.suggestions == example_response['replacements']
 
 
-@pytest.mark.parametrize("example_typo", range(2), indirect=True)
-def test_create_typo(example_typo):
-    typo, _ = example_typo
-    assert typo.offset == 23
-    assert typo.length == 4
-    assert typo.message == 'Possible spelling mistake found.'
-    assert typo.suggestions == typo['replacements']
-
-
-@pytest.mark.parametrize("example_typo", (2,), indirect=True)
+@pytest.mark.typo_id(2)
 def test_choice(example_typo, monkeypatch):
-    typo, _ = example_typo
     monkeypatch.setattr('builtins.input', dummy.fake_input((-1, 5, 3)))
-    assert typo.get_choice() == 3
+    assert example_typo.get_choice() == 3
 
 
-@pytest.mark.parametrize("example_typo", range(2), indirect=True)
-def test_prompt(example_typo, capsys, monkeypatch):
-    typo, prompt = example_typo
+@pytest.mark.parametrize("example_typo", range(3), indirect=True)
+@pytest.mark.parametrize("example_prompt", range(3), indirect=True)
+def test_prompt(example_typo, example_prompt, capsys, monkeypatch):
     monkeypatch.setattr('builtins.input', lambda _: '0')
-    typo.select_fix()
+    example_typo.select_fix()
     captured = capsys.readouterr()
-    assert captured.out == prompt
+    assert captured.out == example_prompt

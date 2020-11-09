@@ -38,11 +38,12 @@ def test_load():
     assert file.data == test_data
 
 
-def test_save():
-    file = FileIO('test/to_be.txt', 'test/out.txt')
+def test_save(tmp_path):
+    out = tmp_path / 'out.txt'
+    file = FileIO('test/to_be.txt', str(out))
     file.data = test_data
     file.save()
-    with pathlib.Path('test/out.txt').open('r') as check_file:
+    with out.open('r') as check_file:
         assert check_file.read() == test_data
 
 

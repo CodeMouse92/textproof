@@ -1,4 +1,5 @@
 text = 'He and me went too the stor.'
+
 output = "He and I went to the store."
 
 api_response = [
@@ -38,6 +39,7 @@ api_response = [
     }
 ]
 
+
 prompts = [
 """
 He and me went too the stor.
@@ -64,10 +66,6 @@ Possible spelling mistake found.
 0: (Skip)
 """
 ]
-
-
-def api_query(text):
-    return api_response
 
 
 def fake_input(vals):

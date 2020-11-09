@@ -4,8 +4,7 @@ from . import dummy
 
 
 @pytest.fixture
-def example_checked(monkeypatch):
-    monkeypatch.setattr('textproof.api.api_query', dummy.api_query)
+def example_checked(fake_api_query):
     return CheckedText(dummy.text)
 
 
