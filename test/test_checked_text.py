@@ -1,20 +1,23 @@
+from test.conftest import fake_api_query
 import pytest
-from textproof.checked_text import CheckedText
-from . import dummy
+import textproof.checked_text
 
 
 @pytest.fixture
-def example_checked(fake_api_query):
-    return CheckedText(dummy.text)
+def example_checked(monkeypatch):
+    return textproof.checked_text.CheckedText(pytest.example_text)
 
 
-def test_checked_text_init(example_checked,):
-    assert example_checked.text == dummy.text
+def test_checked_text_init(example_checked):
+    assert example_checked.text == pytest.example_text
     assert len(example_checked.typos) == 3
 
 
-@pytest.mark.parametrize("inputs, expected", [((0, 0, 0), dummy.text), ((1, 1, 3), dummy.output)])
-def test_fix_typo(example_checked, monkeypatch, inputs, expected):
-    monkeypatch.setattr('builtins.input', dummy.fake_input(inputs))
+@pytest.mark.parametrize(
+    "fake_inputs, expected",
+    [((0, 0, 0), pytest.example_text), ((1, 1, 3), pytest.example_output)],
+    indirect=["fake_inputs"]
+)
+def test_fix_typo(example_checked, fake_inputs, expected):
     example_checked.fix_typos()
     assert example_checked.revised == expected
