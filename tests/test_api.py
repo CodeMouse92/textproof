@@ -1,6 +1,5 @@
 import pytest
 import requests
-from textproof.api import api_query
 
 def test_api_layout():
     response = requests.post(

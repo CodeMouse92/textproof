@@ -4,6 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [tool.pytest.ini_options]
 markers = [
-    "typo_id",
-    "inputs"
+    "typo_id"
+]
+
+[tool.coverage.paths]
+source = [
+    "src/textproof",
+    "**/site-packages/textproof"
 ]

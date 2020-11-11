@@ -2,13 +2,14 @@ class Typo:
     def __init__(self, typo):
         context = typo["context"]
         self.text = context["text"]
-        self.offset = int(context["offset"])
-        self.length = int(context["length"])
+        self.hint_offset = int(context["offset"])
+        self.offset = int(typo["offset"])
+        self.length = int(typo["length"])
         self.message = typo["message"]
         self.suggestions = typo["replacements"]
 
     def __str__(self):
-        underline = "".join((" " * self.offset, "^" * self.length))
+        underline = "".join((" " * self.hint_offset, "^" * self.length))
         return "\n".join((self.text, underline, self.message))
 
     def get_choice(self):
