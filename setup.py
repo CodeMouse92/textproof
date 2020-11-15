@@ -22,12 +22,12 @@ setup(
     keywords='proof, spelling, grammar, utility',
 
     package_dir={'': 'src'},
-    packages=find_packages(where='src'),
+    packages=find_packages(where='src', exclude=('tests')),
     include_package_data=True,
     python_requires='>=3.6, <4',
     install_requires=['requests', 'click'],
     extras_require={
-        'test': ['pytest', 'coverage'],
+        'test': ['pytest', 'coverage', 'tox'],
     },
 
     entry_points={
