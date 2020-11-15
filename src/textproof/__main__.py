@@ -1,4 +1,5 @@
-import pathlib
+#!/usr/bin/env python3
+
 import click
 from textproof.fileio import FileIO
 from textproof.checked_text import CheckedText
@@ -17,6 +18,7 @@ def main(path, output):
     check = CheckedText(file.data)
     check.fix_typos()
     file.data = str(check)
+
     file.save()
 
 

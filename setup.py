@@ -27,7 +27,7 @@ setup(
     python_requires='>=3.6, <4',
     install_requires=['requests', 'click'],
     extras_require={
-        'test': ['pytest'],
+        'test': ['pytest', 'coverage'],
     },
 
     entry_points={

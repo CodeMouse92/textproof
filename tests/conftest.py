@@ -1,6 +1,6 @@
 import pytest
 
-example_text = 'He and me went too the stor.'
+example_text = "He and me went too the stor."
 
 example_output = "He and I went to the store."
 
@@ -41,6 +41,7 @@ example_api_response = [
     }
 ]
 
+
 example_prompts = [
 """
 He and me went too the stor.
@@ -68,7 +69,6 @@ Possible spelling mistake found.
 """
 ]
 
-
 def pytest_configure(config):
     pytest.example_text = example_text
     pytest.example_output = example_output
@@ -79,33 +79,47 @@ def pytest_configure(config):
 @pytest.fixture
 def example_response(request):
     marker = request.node.get_closest_marker("typo_id")
-    if marker is None:
-        i = 1
+    if marker:
+        index = marker.args[0]
     else:
-        i = marker.args[0]
-    return example_api_response[i]
+        index = request.param
+    return example_api_response[index]
 
 
 @pytest.fixture
 def example_typo(request):
-    from textproof.typo import Typo
-
     marker = request.node.get_closest_marker("typo_id")
-    if marker is None:
-        i = 1
+    if marker:
+        index = marker.args[0]
     else:
-        i = marker.args[0]
-    return Typo(example_api_response[i])
+        index = request.param
+
+    from textproof.typo import Typo
+    return Typo(example_api_response[index])
+
+
+@pytest.fixture
+def fake_inputs(request, monkeypatch):
+    def fake():
+        value = iter(request.param)
+
+        def input(_):
+            return next(value)
+
+        return input
+
+    monkeypatch.setattr('builtins.input', fake())
 
 
 @pytest.fixture
 def example_prompt(request):
     marker = request.node.get_closest_marker("typo_id")
-    if marker is None:
-        i = 1
+    if marker:
+        index = marker.args[0]
     else:
-        i = marker.args[0]
-    return example_prompts[i]
+        index = request.param
+
+    return example_prompts[index]
 
 
 @pytest.fixture(autouse=True)
@@ -116,16 +130,3 @@ def fake_api_query(monkeypatch):
 
     monkeypatch.setattr('textproof.api.api_query', mock_api_query)
     monkeypatch.setattr('textproof.checked_text.api_query', mock_api_query)
-
-
-@pytest.fixture
-def fake_inputs(request, monkeypatch):
-    def fake():
-        i = iter(request.param)
-
-        def input(_):
-            return next(i)
-
-        return input
-
-    monkeypatch.setattr('builtins.input', fake())
