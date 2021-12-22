@@ -8,10 +8,10 @@ def api_query(text):
         headers={"Content-Type": "application/json"},
         data={"text": text, "language": lang},
     )
-    if response.status_code == 200:
-        software = response.json()["software"]
-        print(f"{software['name']} v{software['version']}")
-        print(f"{response.json()['language']['name']}")
-        return response.json()["matches"]
-    else:
+    if response.status_code != 200:
         raise RuntimeError(f"API error: [{response}] {response.text}")
+
+    software = response.json()["software"]
+    print(f"{software['name']} v{software['version']}")
+    print(response.json()['language']['name'])
+    return response.json()["matches"]

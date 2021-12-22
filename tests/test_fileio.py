@@ -1,5 +1,5 @@
-import pytest
 import pathlib
+import pytest
 from textproof.fileio import FileIO
 
 
@@ -8,16 +8,16 @@ class TestFileIO:
     demo_data = "To be, or not to be, that is the question!"
 
     @pytest.fixture
-    def demo_in_file(self, tmp_path, scope='class'):
-        test_in_file = f'{tmp_path}/to_be.txt'
-        with pathlib.Path(test_in_file).open('w') as file:
+    def demo_in_file(self, tmp_path):
+        test_in_file = pathlib.Path(tmp_path) / 'to_be.txt'
+        with test_in_file.open('w') as file:
             file.write(self.demo_data)
-        return test_in_file
+        return str(test_in_file)
 
     @pytest.fixture
-    def demo_out_file(self, tmp_path, scope='class'):
-        test_out_file = f'{tmp_path}/out.txt'
-        return test_out_file
+    def demo_out_file(self, tmp_path):
+        test_out_file = pathlib.Path(tmp_path) / 'out.txt'
+        return str(test_out_file)
 
     def test_in_path(self, demo_in_file):
         file = FileIO(demo_in_file)
@@ -47,7 +47,7 @@ class TestFileIO:
         with pathlib.Path(demo_out_file).open('r') as check_file:
             assert check_file.read() == self.demo_data
 
-    def test_save_no_load(self, demo_in_file, demo_out_file):
+    def test_save__no_load(self, demo_in_file, demo_out_file):
         file = FileIO(demo_in_file, demo_out_file)
         with pytest.raises(RuntimeError):
             file.save()

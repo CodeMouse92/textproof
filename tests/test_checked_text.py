@@ -1,14 +1,14 @@
 import pytest
-import textproof.checked_text
+from textproof.checked_text import CheckedText
 
 
-class TestCheckedTest:
+class TestCheckedText:
 
     @pytest.fixture
-    def example_checked(self, monkeypatch, scope="class"):
-        return textproof.checked_text.CheckedText(pytest.example_text)
+    def example_checked(self, monkeypatch):
+        return CheckedText(pytest.example_text)
 
-    def test_checked_text_init(self, example_checked):
+    def test_checked_text__init(self, example_checked):
         assert example_checked.text == pytest.example_text
         assert len(example_checked.typos) == 3
 

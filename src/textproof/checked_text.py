@@ -15,13 +15,14 @@ class CheckedText:
     def fix_typos(self):
         for typo in self.typos:
             suggestion, offset, length, change = typo.select_fix()
-            if suggestion:
-                offset += self.length_change
-                self.revised = "".join(
-                    (
-                        self.revised[:offset],
-                        suggestion,
-                        self.revised[offset + length:]
-                    )
+            if not suggestion:
+                continue
+            offset += self.length_change
+            self.revised = "".join(
+                (
+                    self.revised[:offset],
+                    suggestion,
+                    self.revised[offset + length:]
                 )
-                self.length_change += change
+            )
+            self.length_change += change
