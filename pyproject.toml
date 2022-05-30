@@ -1,29 +1,3 @@
 [build-system]
 requires = ["setuptools>40.8.0", "wheel"]
 build-backend = "setuptools.build_meta"
-
-[tool.pytest.ini_options]
-markers = [
-    "typo_id: the example scenario number"
-]
-
-[tool.coverage.run]
-source = [
-    "textproof",
-]
-
-[tool.coverage.paths]
-source = [
-    "src/textproof",
-    "**/site-packages/textproof"
-]
-
-[tool.tox]
-legacy_tox_ini = """
-[tox]
-envlist = py37, py38, py39
-
-[testenv]
-deps = pytest
-commands = pytest
-"""
