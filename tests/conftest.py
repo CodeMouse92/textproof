@@ -17,9 +17,11 @@ example_api_response = [
         'replacements': [{'value': 'I'}],
     },
     {
-        'context': {'length': 7,
-                'offset': 15,
-                'text': 'He and me went too the stor.'},
+        'context': {
+            'length': 7,
+            'offset': 15,
+            'text': 'He and me went too the stor.'
+        },
         'length': 7,
         'message': 'Did you mean “to the”?',
         'offset': 15,
@@ -35,12 +37,11 @@ example_api_response = [
         'message': 'Possible spelling mistake found.',
         'offset': 23,
         'replacements': [{'value': 'story'},
-                        {'value': 'stop'},
-                        {'value': 'store'},
-                        {'value': 'storm'}]
+                         {'value': 'stop'},
+                         {'value': 'store'},
+                         {'value': 'storm'}]
     }
 ]
-
 
 example_prompts = [
 """
@@ -68,6 +69,7 @@ Possible spelling mistake found.
 0: (Skip)
 """
 ]
+
 
 def pytest_configure(config):
     pytest.example_text = example_text
