@@ -1,5 +1,4 @@
 import pytest
-from textproof.typo import Typo
 
 
 class TestTypo:

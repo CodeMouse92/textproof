@@ -4,6 +4,7 @@ import click
 from textproof.fileio import FileIO
 from textproof.checked_text import CheckedText
 
+
 @click.command()
 @click.argument('path')
 @click.option('--output', default=None, help="the path to write to")

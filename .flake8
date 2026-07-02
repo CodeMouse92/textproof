@@ -10,3 +10,4 @@ exclude =
     .venv,
     .gitvenv,
 select = E,W,F
+ignore = E122

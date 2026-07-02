@@ -1,6 +1,7 @@
 import pytest
 import requests
 
+
 def test_api_layout():
     response = requests.post(
         "https://languagetool.org/api/v2/check",
