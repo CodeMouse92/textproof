@@ -2,10 +2,40 @@
 requires = ["setuptools>40.8.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
-[tool.pytest.ini_options]
-markers = [
-    "typo_id: the example scenario number"
+[project.urls]
+Repository = "https://github.com/codemouse92/textproof"
+Issues = "https://github.com/codemouse92/textproof/issues"
+Funding = "https://github.com/sponsors/CodeMouse92"
+
+[project]
+name = "textproof"
+version = "1.0.0"
+description = "Perform command-line spelling and grammar check on text."
+readme = {file = "README.md", content-type = "text/markdown"}
+license-files = ["LICENSE"]
+authors = [
+    {name = "Jason C. McDonald", email = "codemouse92@outlook.com"}
 ]
+maintainers = [
+    {name = "Jason C. McDonald", email = "codemouse92@outlook.com"}
+]
+keywords = ["proof", "spelling", "grammar", "utility"]
+
+dependencies = [
+    "requests >= 2.34.2",
+    "click >= 8.4.2"
+]
+requires-python = ">=3.10, <4"
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "coverage",
+    "tox"
+]
+
+[project.console-scripts]
+textproof = "textproof.__main__:main"
 
 [tool.coverage.run]
 source = [
@@ -21,9 +51,17 @@ source = [
 [tool.tox]
 legacy_tox_ini = """
 [tox]
-envlist = py37, py38, py39
+isolated_build = True
+envlist = py310, py312, py314
 
 [testenv]
-deps = pytest
-commands = pytest
+deps =
+    pytest
+commands =
+    pytest
 """
+
+[tool.pytest.ini_options]
+markers = [
+    "typo_id: the example scenario number"
+]
