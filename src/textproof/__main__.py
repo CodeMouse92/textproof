@@ -8,8 +8,8 @@ from textproof.checked_text import CheckedText
 @click.command()
 @click.argument('path')
 @click.option('--output', default=None, help="the path to write to")
-def main(path, output):
-    file = FileIO(path, output)
+def main(path: str, output: str) -> None:
+    file: FileIO = FileIO(path, output)
     try:
         file.load()
     except FileNotFoundError:

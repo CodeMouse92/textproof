@@ -1,4 +1,8 @@
 import pytest
+from pytest import CaptureFixture, MonkeyPatch
+
+from textproof.api import RawTypo
+from textproof.typo import Typo
 
 
 class TestTypo:
@@ -8,7 +12,7 @@ class TestTypo:
         [(0, 0), (1, 1), (2, 2)],
         indirect=("example_typo", "example_response")
     )
-    def test_create_typo(self, example_typo, example_response):
+    def test_create_typo(self, example_typo: Typo, example_response: RawTypo) -> None:
         assert example_typo.offset == example_response['offset']
         assert example_typo.length == example_response['length']
         assert example_typo.message == example_response['message']
@@ -20,7 +24,7 @@ class TestTypo:
         [('-1', '20', '3'), ('3',), ('fish', '1.1', '3')],
         indirect=True
     )
-    def test_choice(self, example_typo, fake_inputs):
+    def test_choice(self, example_typo: Typo, fake_inputs: tuple[int | str, ...]) -> None:
         assert example_typo.get_choice() == 3
 
     @pytest.mark.parametrize(
@@ -28,7 +32,7 @@ class TestTypo:
         [(n, n) for n in range(3)],
         indirect=["example_typo", "example_prompt"]
     )
-    def test_prompt(self, example_typo, example_prompt, capsys, monkeypatch):
+    def test_prompt(self, example_typo: Typo, example_prompt: str, capsys: CaptureFixture[str], monkeypatch: MonkeyPatch) -> None:
         monkeypatch.setattr('builtins.input', lambda _: '0')
         example_typo.select_fix()
         captured = capsys.readouterr()

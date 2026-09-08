@@ -1,10 +1,18 @@
+from typing import TYPE_CHECKING, Any
+
 import pytest
+from pytest import FixtureRequest, MonkeyPatch
 
-example_text = "He and me went too the stor."
+from textproof.typo import Typo
 
-example_output = "He and I went to the store."
+if TYPE_CHECKING:
+    from textproof.api import RawTypo
 
-example_api_response = [
+example_text: str = "He and me went too the stor."
+
+example_output: str = "He and I went to the store."
+
+example_api_response: list['RawTypo'] = [
     {
         'context': {
             'length': 2,
@@ -43,7 +51,7 @@ example_api_response = [
     }
 ]
 
-example_prompts = [
+example_prompts: list[str] = [
 """
 He and me went too the stor.
        ^^
@@ -71,28 +79,21 @@ Possible spelling mistake found.
 ]
 
 
-def pytest_configure(config):
-    pytest.example_text = example_text
-    pytest.example_output = example_output
-    pytest.example_api_response = example_api_response
-    pytest.example_prompts = example_prompts
-
-
 @pytest.fixture
-def example_response(request):
+def example_response(request: FixtureRequest) -> 'RawTypo':
     marker = request.node.get_closest_marker("typo_id")
     if marker:
-        index = marker.args[0]
+        index: int = marker.args[0]
     else:
         index = request.param
     return example_api_response[index]
 
 
 @pytest.fixture
-def example_typo(request):
+def example_typo(request: FixtureRequest) -> Typo:
     marker = request.node.get_closest_marker("typo_id")
     if marker:
-        index = marker.args[0]
+        index: int = marker.args[0]
     else:
         index = request.param
 
@@ -101,11 +102,11 @@ def example_typo(request):
 
 
 @pytest.fixture
-def fake_inputs(request, monkeypatch):
-    def fake():
+def fake_inputs(request: FixtureRequest, monkeypatch: MonkeyPatch) -> None:
+    def fake() -> Any:
         value = iter(request.param)
 
-        def input(_):
+        def input(_: Any) -> Any:
             return next(value)
 
         return input
@@ -114,10 +115,10 @@ def fake_inputs(request, monkeypatch):
 
 
 @pytest.fixture
-def example_prompt(request):
+def example_prompt(request: FixtureRequest) -> str:
     marker = request.node.get_closest_marker("typo_id")
     if marker:
-        index = marker.args[0]
+        index: int = marker.args[0]
     else:
         index = request.param
 
@@ -125,8 +126,8 @@ def example_prompt(request):
 
 
 @pytest.fixture(autouse=True)
-def fake_api_query(monkeypatch):
-    def mock_api_query(_):
+def fake_api_query(monkeypatch: MonkeyPatch) -> None:
+    def mock_api_query(_: str) -> list['RawTypo']:
         print("FAKING IT")
         return example_api_response
 

@@ -1,28 +1,28 @@
-import pathlib
+from pathlib import Path
 
 
 class FileIO:
 
-    def __init__(self, in_file, out_file=None):
-        self.in_file = pathlib.Path(in_file)
+    def __init__(self, in_file: str, out_file: str | None = None) -> None:
+        self.in_file: Path = Path(in_file)
         if not self.in_file.exists():
             raise FileNotFoundError(f"Invalid input file: {self.in_file}")
 
         if out_file is None:
             out_file = in_file
-        self.out_file = pathlib.Path(out_file)
-        self.out_file_tmp = pathlib.Path(out_file + '.tmp')
+        self.out_file: Path = Path(out_file)
+        self.out_file_tmp: Path = Path(out_file + '.tmp')
 
-        self.data = None
+        self.data: str = ''
 
-    def load(self):
+    def load(self) -> str:
         if not self.data:
             with self.in_file.open('r') as file:
                 self.data = file.read()
 
         return self.data
 
-    def save(self):
+    def save(self) -> None:
         if not self.data:
             raise RuntimeError("Nothing to save.")
 

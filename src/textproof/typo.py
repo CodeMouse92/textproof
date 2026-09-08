@@ -1,22 +1,30 @@
-class Typo:
-    def __init__(self, typo):
-        context = typo["context"]
-        self.text = context["text"]
-        self.hint_offset = int(context["offset"])
-        self.offset = int(typo["offset"])
-        self.length = int(typo["length"])
-        self.message = typo["message"]
-        self.suggestions = typo["replacements"]
+from typing import override
 
-    def __str__(self):
-        underline = "".join((" " * self.hint_offset, "^" * self.length))
+from textproof.api import RawTypo, RawTypoSuggestion
+
+type Fix_T = tuple[str | None, int, int, int]
+
+
+class Typo:
+    def __init__(self, typo: RawTypo) -> None:
+        context = typo["context"]
+        self.text: str = context["text"]
+        self.hint_offset: int = int(context["offset"])
+        self.offset: int = int(typo["offset"])
+        self.length: int = int(typo["length"])
+        self.message: str = typo["message"]
+        self.suggestions: list[RawTypoSuggestion] = typo["replacements"]
+
+    @override
+    def __str__(self) -> str:
+        underline: str = "".join((" " * self.hint_offset, "^" * self.length))
         return "\n".join((self.text, underline, self.message))
 
-    def get_choice(self):
+    def get_choice(self) -> int:
         while True:
-            raw = input("Select an option: ")
+            raw: str = input("Select an option: ")
             try:
-                choice = int(raw)
+                choice: int = int(raw)
             except ValueError:
                 print("Please enter a valid integer.")
                 continue
@@ -27,7 +35,7 @@ class Typo:
 
             return choice
 
-    def select_fix(self):
+    def select_fix(self) -> Fix_T:
         print('')
         print(self)
 
@@ -41,10 +49,10 @@ class Typo:
                 print(f"{num}: {suggestion['value']}")
         print("0: (Skip)")
 
-        choice = self.get_choice()
+        choice: int = self.get_choice()
         if choice > 0:
-            suggestion = self.suggestions[choice - 1]["value"]
-            length_change = len(suggestion) - self.length
-            return (suggestion, self.offset, self.length, length_change)
+            suggestion_text: str = self.suggestions[choice - 1]["value"]
+            length_change = len(suggestion_text) - self.length
+            return (suggestion_text, self.offset, self.length, length_change)
         else:
             return (None, 0, 0, 0)

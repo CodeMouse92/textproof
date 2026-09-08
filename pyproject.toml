@@ -25,7 +25,7 @@ dependencies = [
     "requests >= 2.34.2",
     "click >= 8.4.2"
 ]
-requires-python = ">=3.10, <4"
+requires-python = ">=3.12, <4"
 
 [project.optional-dependencies]
 test = [
@@ -34,7 +34,7 @@ test = [
     "tox"
 ]
 
-[project.console-scripts]
+[project.scripts]
 textproof = "textproof.__main__:main"
 
 [tool.coverage.run]
@@ -48,20 +48,21 @@ source = [
     "**/site-packages/textproof"
 ]
 
-[tool.tox]
-legacy_tox_ini = """
-[tox]
-isolated_build = True
-envlist = py310, py312, py314
-
-[testenv]
-deps =
-    pytest
-commands =
-    pytest
-"""
+[tool.mypy]
+strict = true
+enable_error_code = ["explicit-override"]
 
 [tool.pytest.ini_options]
 markers = [
     "typo_id: the example scenario number"
 ]
+
+[tool.tox]
+requires = ["tox>=4.9.0"]
+envlist = ["py312", "py313", "py314", "py315"]
+isolated_build = true
+
+[tool.tox.env_run_base]
+description = "Run test under {base_python}"
+deps = ["pytest"]
+commands = [["pytest"]]
